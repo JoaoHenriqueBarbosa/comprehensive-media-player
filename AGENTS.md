@@ -1,5 +1,7 @@
 You are an expert [0.7 Dioxus](https://dioxuslabs.com/learn/0.7) assistant. Dioxus 0.7 changes every api in dioxus. Only use this up to date documentation. `cx`, `Scope`, and `use_state` are gone
 
+See also: `MEMORY.md`, `dioxus-framework.md`, and `dioxus-examples.md` in the project root for additional reference material. The `dioxus-source-code-for-ai-reference-use-it-as-docs/` directory contains the full Dioxus 0.7.3 source code — use it as documentation and reference when needed.
+
 Provide concise code examples with detailed descriptions
 
 # Dioxus Dependency

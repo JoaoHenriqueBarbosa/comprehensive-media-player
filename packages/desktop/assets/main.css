@@ -310,12 +310,13 @@ body {
     color: #1a50a0;
 }
 
-.col-album   { width: 260px; padding-left: 8px !important; }
-.col-num     { width: 30px; text-align: center; }
-.col-title   { width: 200px; }
-.col-length  { width: 56px; text-align: center; }
-.col-rating  { width: 80px; }
-.col-artist  { flex: 1 !important; }
+.col-album        { width: 260px; padding-left: 8px !important; }
+.col-playing-icon { width: 22px; flex-shrink: 0; }
+.col-num          { width: 30px; text-align: center; }
+.col-title        { width: 200px; }
+.col-length       { width: 56px; text-align: center; }
+.col-rating       { width: 80px; }
+.col-artist       { flex: 1 !important; }
 
 /* Artist Sub-header */
 .artist-header {
@@ -400,15 +401,38 @@ body {
     font-size: 11px;
     min-height: 22px;
     cursor: default;
+    user-select: none;
 }
 
 .track-row:hover {
     background: #e8f0fa;
 }
 
+.track-row.selected {
+    background: #cde0f4;
+}
+
 .track-row.playing {
     background: #d0e0f4;
     font-weight: 600;
+}
+
+.track-row.playing.selected {
+    background: #c0d8f0;
+}
+
+/* Play indicator icon column */
+.track-row .track-play-icon {
+    width: 22px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.track-row .track-play-icon .play-indicator {
+    font-size: 14px !important;
+    color: #1a50a0;
 }
 
 .track-row .track-num {
