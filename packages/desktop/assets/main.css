@@ -630,7 +630,6 @@ body {
 /* Timeline: full-width bar at top */
 .timeline {
     width: 100%;
-    height: 6px;
     padding: 8px 8px 0;
     display: flex;
     align-items: center;
@@ -641,7 +640,7 @@ body {
     height: 4px;
     -webkit-appearance: none;
     appearance: none;
-    background: linear-gradient(to right, #3878c0 0%, #3878c0 25%, #c0c8d4 25%, #c0c8d4 100%);
+    background: #c0c8d4;
     outline: none;
     cursor: pointer;
     margin: 0;
@@ -839,7 +838,7 @@ body {
     width: 10px;
     height: 10px;
     border-radius: 50%;
-    background: #4080c0;
-    border: 1px solid #2060a0;
+    background: linear-gradient(180deg, #e0eaf4 0%, #6098d0 100%);
+    border: 2px solid #3060a0;
     cursor: pointer;
 }

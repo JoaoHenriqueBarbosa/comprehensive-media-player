@@ -463,9 +463,42 @@ fn SidebarRight() -> Element {
     }
 }
 
+// === HELPERS ===
+fn format_time(seconds: f64) -> String {
+    let total_secs = seconds.round() as u32;
+    let mins = total_secs / 60;
+    let secs = total_secs % 60;
+    format!("{mins:02}:{secs:02}")
+}
+
 // === TRANSPORT BAR ===
 #[component]
 fn TransportBar() -> Element {
+    let mut position = use_signal(|| 70.0_f64);
+    let mut volume = use_signal(|| 70.0_f64);
+    let mut is_playing = use_signal(|| true);
+    let duration = 277.0_f64; // 4:37
+
+    let pos_pct = (position() / duration * 100.0).clamp(0.0, 100.0);
+    let vol_pct = volume();
+
+    let timeline_bg = format!(
+        "background: linear-gradient(to right, #3878c0 0%, #3878c0 {pos_pct:.1}%, #c0c8d4 {pos_pct:.1}%, #c0c8d4 100%)"
+    );
+    let volume_bg = format!(
+        "background: linear-gradient(to right, #4080c0 0%, #4080c0 {vol_pct:.1}%, #a0b0c4 {vol_pct:.1}%, #a0b0c4 100%)"
+    );
+
+    let time_current = format_time(position());
+    let play_icon = if is_playing() { "pause" } else { "play_arrow" };
+    let volume_icon = if volume() == 0.0 {
+        "volume_off"
+    } else if volume() < 50.0 {
+        "volume_down"
+    } else {
+        "volume_up"
+    };
+
     rsx! {
         div { class: "transport-bar",
             // Timeline across full width
@@ -474,8 +507,14 @@ fn TransportBar() -> Element {
                     class: "timeline-slider",
                     r#type: "range",
                     min: "0",
-                    max: "277",
-                    value: "70",
+                    max: "{duration}",
+                    value: "{position}",
+                    style: "{timeline_bg}",
+                    oninput: move |evt| {
+                        if let Ok(v) = evt.value().parse::<f64>() {
+                            position.set(v);
+                        }
+                    },
                 }
             }
 
@@ -493,24 +532,44 @@ fn TransportBar() -> Element {
                 div { class: "transport-center",
                     div { class: "controls-capsule",
                         div { class: "capsule-side capsule-left",
-                            span { class: "transport-time", "01:10" }
+                            span { class: "transport-time", "{time_current}" }
                             button { class: "cap-btn small", i { class: "material-icons", "shuffle" } }
                             button { class: "cap-btn small", i { class: "material-icons", "repeat" } }
                             div { class: "cap-separator" }
-                            button { class: "cap-btn", i { class: "material-icons", "stop" } }
+                            button {
+                                class: "cap-btn",
+                                onclick: move |_| position.set(0.0),
+                                i { class: "material-icons", "stop" }
+                            }
                             button { class: "cap-btn", i { class: "material-icons", "skip_previous" } }
                         }
-                        button { class: "cap-btn play-btn", i { class: "material-icons", "pause" } }
+                        button {
+                            class: "cap-btn play-btn",
+                            onclick: move |_| is_playing.toggle(),
+                            i { class: "material-icons", "{play_icon}" }
+                        }
                         div { class: "capsule-side capsule-right",
                             button { class: "cap-btn", i { class: "material-icons", "skip_next" } }
                             div { class: "cap-separator" }
-                            button { class: "cap-btn small", i { class: "material-icons", "volume_up" } }
+                            button {
+                                class: "cap-btn small",
+                                onclick: move |_| {
+                                    if volume() > 0.0 { volume.set(0.0) } else { volume.set(70.0) }
+                                },
+                                i { class: "material-icons", "{volume_icon}" }
+                            }
                             input {
                                 class: "volume-slider",
                                 r#type: "range",
                                 min: "0",
                                 max: "100",
-                                value: "70",
+                                value: "{volume}",
+                                style: "{volume_bg}",
+                                oninput: move |evt| {
+                                    if let Ok(v) = evt.value().parse::<f64>() {
+                                        volume.set(v);
+                                    }
+                                },
                             }
                         }
                     }
